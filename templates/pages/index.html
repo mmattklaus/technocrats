@@ -1,7 +1,122 @@
 {% extends 'layouts/app.html' %}
-
+{% set page = 'home' %}
 {% block content %}
-    <div class="tile">
+    {#<div class="tile">
         <div class="tile-body">Welcome to a beautiful dashboard</div>
+    </div>#}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Humidity</h3>
+                <hr>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <canvas class="embed-responsive-item" id="pieChartDemo"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Temperature</h3>
+                <hr>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <canvas class="embed-responsive-item" id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/plugins/chart.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/plugins/chartjs-plugin-streaming.js') }}"></script>
+    <script type="text/javascript">
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    data: []
+                }, {
+                    data: []
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'realtime',
+                        realtime: {
+                            delay: 2000,
+                            onRefresh: function (chart) {
+                                chart.data.datasets.forEach(function (dataset) {
+                                    dataset.data.push({
+                                        x: Date.now(),
+                                        y: Math.random()
+                                    });
+                                });
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        let data = {
+            labels: ["January", "February", "March", "April", "May"],
+            datasets: [
+                {
+                    label: "My First dataset",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: [65, 59, 80, 81, 56]
+                },
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 86]
+                }
+            ]
+        };
+        let pdata = [
+            {
+                value: 300,
+                color: "#F7464A",
+                highlight: "#FF5A5E",
+                label: "Red"
+            },
+            {
+                value: 50,
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Green"
+            },
+            {
+                value: 100,
+                color: "#FDB45C",
+                highlight: "#FFC870",
+                label: "Yellow"
+            }
+        ]
+
+        let ctxp = document.getElementById("pieChartDemo").getContext("2d");
+        let pieChart = new Chart(ctxp, {
+            type: 'doughnut',
+            data: data
+        });
+
+        {#let ctxd = $("#doughnutChartDemo").get(0).getContext("2d");#}
+        {#let doughnutChart = new Chart(ctxd).Doughnut(pdata);#}
+    </script>
 {% endblock %}

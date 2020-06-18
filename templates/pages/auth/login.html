@@ -1,49 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% include 'partials/_styles.html' %}
     <title>Login - Technocrats</title>
-  </head>
-  <body>
-    <section class="material-half-bg">
-      <div class="cover"></div>
-    </section>
-    <section class="login-content">
-      <div class="logo">
+</head>
+<body>
+<section class="material-half-bg">
+    <div class="cover"></div>
+</section>
+<section class="login-content">
+    <div class="logo">
         <h1>Technocrats</h1>
-      </div>
-      <div class="login-box">
+    </div>
+    <div class="login-box">
         <form class="login-form" action="{{ url_for('login') }}" method="post">
-          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-coffee"></i>SIGN IN</h3>
-          <div class="form-group">
-            <label class="control-label">USERNAME</label>
-            <input name="t_username" class="form-control" type="text" placeholder="Username" autofocus>
-          </div>
-          <div class="form-group">
-            <label class="control-label">PASSWORD</label>
-            <input name="t_password" class="form-control" type="password" placeholder="Password">
-          </div>
-          <div class="form-group">
-            <div class="utility">
-
+            <h3 class="login-head"><i class="fa fa-lg fa-fw fa-coffee"></i>SIGN IN</h3>
+            <div class="form-group">
+                <label class="control-label">USERNAME</label>
+                <input name="t_username" class="form-control" value="{% if old %}{{ old['username'] }}{% endif %}"
+                       type="text" placeholder="Username" {% if not old %}autofocus{% endif %}>
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% for category, message in messages %}
+                        <span class="pl-2 text-{{ category }}">{{ message }}</span>
+                    {% endfor %}
+                {% endwith %}
             </div>
-          </div>
-          <div class="form-group btn-container">
-            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-fw"></i>SIGN IN</button>
-          </div>
+            <div class="form-group">
+                <label class="control-label">PASSWORD</label>
+                <input name="t_password" class="form-control" type="password" placeholder="Password"
+                       {% if old %}autofocus{% endif %}>
+            </div>
+            <div class="form-group">
+                <div class="utility">
+
+                </div>
+            </div>
+            <div class="form-group btn-container">
+                <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-fw"></i>SIGN IN
+                </button>
+            </div>
         </form>
-      </div>
-    </section>
-    {% include 'partials/_scripts.html' %}
-    <script type="text/javascript">
-      // Login Page Flipbox control
-      $('.login-content [data-toggle="flip"]').click(function() {
-      	$('.login-box').toggleClass('flipped');
-      	return false;
-      });
-    </script>
-  </body>
+    </div>
+</section>
+{% include 'partials/_scripts.html' %}
+<script type="text/javascript">
+    // Login Page Flipbox control
+    $('.login-content [data-toggle="flip"]').click(function () {
+        $('.login-box').toggleClass('flipped');
+        return false;
+    });
+</script>
+</body>
 </html>
